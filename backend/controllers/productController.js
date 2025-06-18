@@ -2,12 +2,12 @@ import { ApiError } from '../../../You_tube/src/utils/ApiError.js';
 import { asyncHandler } from '../../../You_tube/src/utils/asyncHandler.js';
 import { Product } from '../models/productModel.js'
 import { ApiResponse } from '../utils/ApiResponse.js';
-
+import { ApiFeatures } from '../utils/ApiFeatures.js'
 
 // create product --Admin
 const createProduct = asyncHandler(async (req, res) => {
     const product = await Product.create(req.body);
-    console.log(product)
+    // console.log(product)
     if (!product) {
         throw new ApiError(400, 'product note create something went wrong')
     }
@@ -38,13 +38,25 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 //getProducts
 const getAllProducts = asyncHandler(async (req, res) => {
-    const allProducts = await Product.find();
+
+    let resutPerPage = 5;
+    const productCount = await Product.countDocuments();
+    const apiFeatures = new ApiFeatures(Product.find(), req.query)
+        .search()
+        .filter()
+        .pagination(resutPerPage);
+    // console.log('api', apiFeatures)
+    const allProducts = await apiFeatures.query;
+
+    console.log('Number of products found:', allProducts.length);
+    console.log('Products:', allProducts);
+
     if (!allProducts) {
         throw ApiError(404, 'all product not get something went wrong')
     }
 
     res.status(200).json(
-        new ApiResponse(200, allProducts, "all product fetch successfully")
+        new ApiResponse(200, allProducts, "all product fetch successfully", productCount)
     )
 })
 
