@@ -14,7 +14,7 @@ import {
     updateUserRole
 } from '../controllers/userController.js'
 import { authorizeRoles, isAuthenticatedUser } from '../middleware/auth.js'
-import { deleteReview, getAllReviews } from '../controllers/productController.js'
+
 
 const router = Router()
 
@@ -31,9 +31,6 @@ router.route('/users/user/:id')
     .get(isAuthenticatedUser, authorizeRoles('admin'), sigleUserDetails)
     .put(isAuthenticatedUser, authorizeRoles('admin'), updateUserRole)
     .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteUser);
-router.route("/getReviews/:productId")
-    .get(isAuthenticatedUser, getAllReviews)
-    .delete(isAuthenticatedUser, deleteReview)
 
 router.route('/users/logout').get(logOutUser)
 
