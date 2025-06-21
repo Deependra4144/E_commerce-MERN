@@ -99,7 +99,7 @@ const getProductDetails = asyncHandler(async (req, res) => {
 // create new review or update the review
 const createProductReview = asyncHandler(async (req, res) => {
     const { rating, comment, productId } = req.body;
-    console.log('hello', rating, comment, productId);
+    // console.log('hello', rating, comment, productId);
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -145,7 +145,7 @@ const createProductReview = asyncHandler(async (req, res) => {
 
 // get All Reviews
 const getAllReviews = asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params.productId)
     if (!product) {
         throw new ApiError(404, 'Product not found, Some thing went wrong while getAllReviews')
     }
@@ -162,15 +162,35 @@ const getAllReviews = asyncHandler(async (req, res) => {
 // delete reviews
 const deleteReview = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.productId);
-    console.log(req.query.id)
+
     if (!product) {
-        throw new ApiError(404, 'product cant delete something went wrong !!')
+        throw new ApiError(404, 'Product not found')
     }
 
+    console.log('Review ID to delete:', req.query.id)
+
     const reviews = product.reviews.filter((rev) => {
-        return rev._id?.toString() !== req.query.id.toString()
+        return rev._id?.toString() !== req.query.id?.toString()
     })
-    console.log(reviews)
+    console.log('Reviews after filtering:', reviews)
+
+    // Update the product with filtered reviews
+    product.reviews = reviews;
+    product.numOfReviews = reviews.length;
+
+    // Recalculate average rating
+    let avg = 0;
+    if (reviews.length > 0) {
+        reviews.forEach(rev => {
+            avg += rev.rating;
+        });
+        product.ratings = avg / reviews.length;
+    } else {
+        product.ratings = 0;
+    }
+
+    // Save the updated product
+    await product.save({ validateBeforeSave: false });
 
     res.status(200).json(
         new ApiResponse(
