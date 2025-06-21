@@ -4,13 +4,19 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
-    getProductDetails
+    getProductDetails,
+    createProductReview
 } from '../controllers/productController.js'
+import { isAuthenticatedUser, authorizeRoles } from '../middleware/auth.js';
 
 const router = express.Router()
 
-router.route('/products').get(getAllProducts)
-router.route('/product/new').post(createProduct)
-router.route('/product/:id').put(updateProduct).delete(deleteProduct).get(getProductDetails);
+router.route('/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), createProduct)
+router.route('/products').get(getAllProducts);
+router.route('/product/:id').get(getProductDetails);
+router.route('/product/:id')
+    .put(isAuthenticatedUser, authorizeRoles('admin'), updateProduct)
+    .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
+router.route("/review").put(isAuthenticatedUser, createProductReview)
 
 export default router
