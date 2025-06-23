@@ -4,8 +4,8 @@ import StarRatings from 'react-star-ratings';
 const ProductCard = ({ product }) => {
     return (
         <Link
-            to={`/${product._id}`}
-            className="relative group border-2 block w-1/5 pt-2 bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-3 transition-all duration-300 overflow-hidden"
+            to={`/product/${product._id}`}
+            className="relative group border-2 block w-1/4 pt-2 bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-3 transition-all duration-300 overflow-hidden"
         >
 
             <img
@@ -27,7 +27,7 @@ const ProductCard = ({ product }) => {
                         starDimension="15px"
                         starSpacing="1px"
                     />
-                    <p className="text-xs text-gray-500">(256 reviews)</p>
+                    <p className="text-xs text-gray-500">{product.numOfReviews}</p>
                 </div>
 
                 <span className="block mt-3 text-xl font-bold text-blue-600">

@@ -40,7 +40,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 //getProducts
 const getAllProducts = asyncHandler(async (req, res) => {
 
-    let resutPerPage = 5;
+    let resutPerPage = 8;
     const productCount = await Product.countDocuments();
     const apiFeatures = new ApiFeatures(Product.find(), req.query)
         .search()

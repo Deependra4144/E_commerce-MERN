@@ -1,0 +1,5 @@
+.carousel .thumb.selected,
+.carousel .thumb:focus {
+    border: none !important;
+    box-shadow: none !important;
+}

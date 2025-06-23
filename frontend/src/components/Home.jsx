@@ -1,15 +1,19 @@
 import './home.css'
 import { FaMouse } from 'react-icons/fa'
-import Product from './Product'
+import Product from '../pages/Product'
+import { AllProducts } from '../features/productlice/productSlice'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
 
 function Home() {
-    const product = {
-        name: "Blue T-Shirt",
-        images: [{ url: 'https://i.pinimg.com/474x/89/47/f9/8947f943d58bd5d8e5aaaa0f0bb0cb51.jpg' }],
-        price: 2399,
-        _id: "SiyaRam",
-        rating: 5
-    }
+    let dispatch = useDispatch()
+    const { products, loading } = useSelector(state => state.product)
+
+    useEffect(() => {
+        dispatch(AllProducts())
+    }, [])
+
+
     return (
         <>
 
@@ -37,12 +41,12 @@ function Home() {
             </div>
             <div id="container" className='md:px-4 '>
                 <h2 className='w-1/6 text-center mb-10 mx-auto border-b-2 border-blue-400 text-gray-600 font-bold text-2xl'>Featured Product</h2>
-                <div className='flex flex-wrap gap-10 justify-center'>
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num, index) => {
+                {!loading ? (<div className='flex flex-wrap gap-10 justify-center'>
+                    {products.map((product, index) => {
                         return <Product key={index} product={product} />
 
                     })}
-                </div>
+                </div>) : (<p className='text-center text-2xl font-semibold'>Loading....</p>)}
             </div>
 
         </>

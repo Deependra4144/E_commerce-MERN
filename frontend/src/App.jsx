@@ -4,8 +4,9 @@ import { BrowserRouter, createBrowserRouter } from 'react-router-dom'
 import webFont from 'webfontloader'
 import Layout from './components/layout/Layout.jsx'
 import { RouterProvider } from 'react-router-dom'
-import Home from './pages/Home.jsx'
-import About from './pages/About.jsx'
+import Home from './components/Home.jsx'
+import About from './components/About.jsx'
+import ProductDetails from './pages/ProductDetails.jsx'
 function App() {
   const router = createBrowserRouter([{
     path: "/",
@@ -19,6 +20,10 @@ function App() {
         path: '/about',
         element: <About />
       },
+      {
+        path: '/product/:id',
+        element: <ProductDetails />
+      },
     ]
   }])
   useEffect(() => {
@@ -30,7 +35,7 @@ function App() {
   }, [])
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <RouterProvider router={router} />
     </>
   )
 }
