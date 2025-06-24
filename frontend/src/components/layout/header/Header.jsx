@@ -19,10 +19,10 @@ function Header() {
     }, []);
 
     const navItems = [
-        { name: 'Home', href: '/' },
-        { name: 'About', href: '/about' },
-        { name: 'Contact', href: '/contact' },
-        { name: 'Products', href: '/products' }
+        { name: 'Home', to: '/' },
+        { name: 'Products', to: '/products' },
+        { name: 'About', to: '/about' },
+        { name: 'Contact', to: '/contact' },
     ];
 
     return (
@@ -47,7 +47,7 @@ function Header() {
                             {navItems.map((item, index) => (
                                 <NavLink
                                     key={item.name}
-                                    to={item.href}
+                                    to={item.to}
                                     style={{ animationDelay: `${index * 100}ms` }}
                                     className={({ isActive }) =>
                                         `relative px-3 py-2 text-sm  transition-all duration-300 group ${isActive ? 'text-blue-600 font-bold' : 'text-gray-700 font-medium hover:text-blue-600'

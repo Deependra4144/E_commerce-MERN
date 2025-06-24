@@ -11,6 +11,15 @@ export const AllProducts = createAsyncThunk('getProducts', async (_, thunkApi) =
     }
 })
 
+export const productSearch = createAsyncThunk('searchProduct', async (keyword, thunkApi) => {
+    try {
+        let response = await axiosInstance.get(`/products?keyword=${keyword}`)
+        return response.data.data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.data.message)
+    }
+})
+
 export const productDetails = createAsyncThunk('getProductDetails', async (id, thunkApi) => {
     try {
         let response = await axiosInstance.get(`/product/${id}`)
@@ -25,7 +34,9 @@ let initialState = {
     products: [],
     productDetail: null,
     loading: false,
-    error: null
+    error: null,
+    productCount: null,
+    resultPerPage: null
 
 }
 
@@ -41,12 +52,33 @@ const productSlice = createSlice({
             })
             .addCase(AllProducts.fulfilled, (state, actions) => {
                 state.loading = false
-                state.products = actions.payload
-                // console.log(actions.payload.data)
+                state.productCount = actions.payload.productCount
+                state.products = actions.payload.allProducts
+                state.resultPerPage = actions.payload.resultPerPage
+                // console.log(actions.payload)
             })
             .addCase(AllProducts.rejected, (state, actions) => {
                 state.error = actions.payload
                 state.products = null
+                // state.loading = false
+            })
+
+            //search product
+            .addCase(productSearch.pending, state => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(productSearch.fulfilled, (state, actions) => {
+                state.loading = false
+                state.productCount = actions.payload.productCount
+                state.products = actions.payload.allProducts
+                state.resultPerPage = actions.payload.resultPerPage
+                // console.log(actions.payload)
+            })
+            .addCase(productSearch.rejected, (state, actions) => {
+                state.error = actions.payload
+                state.products = null
+                // state.loading = false
             })
 
             //product Details

@@ -49,15 +49,15 @@ const getAllProducts = asyncHandler(async (req, res) => {
     // console.log('api', apiFeatures)
     const allProducts = await apiFeatures.query;
 
-    console.log('Number of products found:', allProducts.length);
-    console.log('Products:', allProducts);
+    // console.log('Number of products found:', allProducts.length);
+    // console.log('Products:', allProducts);
 
     if (!allProducts) {
         throw ApiError(404, 'all product not get something went wrong')
     }
 
     res.status(200).json(
-        new ApiResponse(200, allProducts, "all product fetch successfully", productCount)
+        new ApiResponse(200, { allProducts, productCount, resutPerPage }, "all product fetch successfully")
     )
 })
 
