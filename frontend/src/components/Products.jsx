@@ -11,12 +11,13 @@ function Products() {
     let dispatch = useDispatch()
     const [currentPage, setCurrentPage] = useState(1)
     const { products, loading, error, resultPerPage } = useSelector(state => state.product)
+    console.log(products.length)
 
-
-    // const handleNextpage = () => {
-
-    // }
-
+    const handleNextpage = (page) => {
+        dispatch(AllProducts(page))
+        setCurrentPage(page)
+    }
+    // http://localhost:4000/api/v1/products?&page=2
 
     useEffect(() => {
         dispatch(AllProducts())
@@ -47,11 +48,11 @@ function Products() {
                     activePage={currentPage}
                     itemsCountPerPage={resultPerPage}
                     totalItemsCount={20}
-                    onChange={(page) => setCurrentPage(page)}  // Fix: Function, not number
+                    onChange={(page) => { handleNextpage(page) }}  // Fix: Function, not number
                     nextPageText="Next"
                     prevPageText="Prev"
-                    firstPageText="1st"
-                    lastPageText="last"
+                    nextClass={products.length < 8 ? 'disabled-pagination' : ''}
+                    prevClass={currentPage === 1 ? 'disabled-pagination' : ''}
                     itemClass="mx-2"
                     linkClass="px-3 py-1 border text-sm rounded text-blue-600 border-blue-300 hover:bg-blue-100"
                     activeClass="bg-blue-200 text-gray-600"

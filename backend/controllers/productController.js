@@ -40,12 +40,12 @@ const updateProduct = asyncHandler(async (req, res) => {
 //getProducts
 const getAllProducts = asyncHandler(async (req, res) => {
 
-    let resutPerPage = 8;
+    let resultPerPage = 8;
     const productCount = await Product.countDocuments();
     const apiFeatures = new ApiFeatures(Product.find(), req.query)
         .search()
         .filter()
-        .pagination(resutPerPage);
+        .pagination(resultPerPage);
     // console.log('api', apiFeatures)
     const allProducts = await apiFeatures.query;
 
@@ -57,7 +57,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
     }
 
     res.status(200).json(
-        new ApiResponse(200, { allProducts, productCount, resutPerPage }, "all product fetch successfully")
+        new ApiResponse(200, { allProducts, productCount, resultPerPage }, "all product fetch successfully")
     )
 })
 

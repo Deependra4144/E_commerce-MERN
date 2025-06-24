@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from "../../services/axiosInstance"
 
-export const AllProducts = createAsyncThunk('getProducts', async (_, thunkApi) => {
+export const AllProducts = createAsyncThunk('getProducts', async (pageNo, thunkApi) => {
     try {
-        let response = await axiosInstance.get('/products')
-        // console.log(response.data)
-        return response.data.data
+        if (pageNo) {
+            let response = await axiosInstance.get(`/products?&page=${pageNo}`)
+            console.log(response.data)
+            return response.data.data
+        } else {
+            let response = await axiosInstance.get('/products')
+            // console.log(response.data)
+            return response.data.data
+        }
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.data.message)
     }
