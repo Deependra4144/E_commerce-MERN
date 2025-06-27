@@ -3,7 +3,7 @@ import logo from '/public/vite.svg'
 import { FaRegUser, FaSearch } from "react-icons/fa";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi";
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -74,15 +74,15 @@ function Header() {
                         <button className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
                             <FaSearch className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                         </button>
-                        <button className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
+                        <Link to="/login" className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
                             <FaRegUser className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                        </button>
-                        <button className="relative p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
+                        </Link>
+                        <Link to='/cart' className="relative p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
                             <BsCart3 className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                                 3
                             </span>
-                        </button>
+                        </Link>
                     </div>
 
                     {/* Mobile menu button */}

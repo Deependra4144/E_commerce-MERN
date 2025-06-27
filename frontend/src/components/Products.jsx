@@ -6,10 +6,15 @@ import ProductCard from '../pages/ProductCard'
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import Pagination from "react-js-pagination";
 import { useState } from 'react';
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+
 
 function Products() {
     let dispatch = useDispatch()
     const [currentPage, setCurrentPage] = useState(1)
+    const [price, setPrice] = useState([0, 25000])
+
     const { products, loading, error, resultPerPage } = useSelector(state => state.product)
     console.log(products.length)
 
@@ -19,6 +24,10 @@ function Products() {
     }
     // http://localhost:4000/api/v1/products?&page=2
 
+    const priceHandler = (e, newPrice) => {
+        setPrice(newPrice)
+
+    }
     useEffect(() => {
         dispatch(AllProducts())
     }, [])
@@ -43,6 +52,19 @@ function Products() {
                 ))}
             </div>
 
+            {/* {price filter-box} */}
+
+            <div className="w-32">
+                <Typography>Price</Typography>
+                <Slider
+                    value={price}
+                    onChange={priceHandler}
+                    valueLabelDisplay='auto'
+                    aria-labelledby='range-slider'
+                    min={0}
+                    max={25000}
+                />
+            </div>
             <div className="flex flex-wrap justify-center gap-2 mt-10">
                 <Pagination
                     activePage={currentPage}
