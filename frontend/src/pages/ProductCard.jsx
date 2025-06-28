@@ -66,7 +66,7 @@ const ProductCard = ({ product }) => {
 
                     <div className="mt-2 flex items-center gap-2">
                         <StarRatings
-                            rating={product.rating}
+                            rating={product.ratings}
                             starRatedColor="#facc15"
                             numberOfStars={5}
                             starDimension="16px"

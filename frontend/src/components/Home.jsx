@@ -36,7 +36,8 @@ function Home() {
         dispatch(AllProducts({
             keyword: '',
             price: [0, 100000],
-            page: 1
+            page: 1,
+            ratings: 4
         }));
     }, [dispatch]);
 

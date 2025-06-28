@@ -5,11 +5,11 @@ export const AllProducts = createAsyncThunk('getProducts', async (filter, thunkA
     console.log(filter)
     try {
         if (filter.category) {
-            let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}&category=${filter.category}`)
+            let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}&category=${filter.category}&ratings[gte]=${filter.ratings}`)
             return response.data.data
 
         }
-        let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}`)
+        let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}&ratings[gte]=${filter.ratings}`)
         return response.data.data
         // console.log(response.data)
     } catch (error) {
