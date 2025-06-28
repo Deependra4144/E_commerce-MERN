@@ -18,7 +18,7 @@ const ProductCard = ({ product }) => {
     };
 
     const calculateDiscount = () => {
-        const mrp = 999; // This should come from product data
+        const mrp = 5000; // This should come from product data
         const discount = ((mrp - product.price) / mrp) * 100;
         return Math.round(discount);
     };
@@ -51,9 +51,9 @@ const ProductCard = ({ product }) => {
                     </div> */}
 
                     {/* Discount Badge */}
-                    <div className="absolute top-2 right-4 ">
-                        <span className="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
-                            {calculateDiscount()}% OFF
+                    <div className="absolute top-0 right-0 ">
+                        <span className="flex flex-col items-center bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                            {calculateDiscount()}<span className="text-xs">% OFF</span>
                         </span>
                     </div>
                 </div>

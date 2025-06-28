@@ -1,30 +1,24 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from "../../services/axiosInstance"
 
-export const AllProducts = createAsyncThunk('getProducts', async (pageNo, thunkApi) => {
+export const AllProducts = createAsyncThunk('getProducts', async (filter, thunkApi) => {
+    console.log(filter)
     try {
-        if (pageNo) {
-            let response = await axiosInstance.get(`/products?&page=${pageNo}`)
-            console.log(response.data)
+        if (filter.category) {
+            let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}&category=${filter.category}`)
             return response.data.data
-        } else {
-            let response = await axiosInstance.get('/products')
-            // console.log(response.data)
-            return response.data.data
+
         }
+        let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}`)
+        return response.data.data
+        // console.log(response.data)
     } catch (error) {
         return thunkApi.rejectWithValue(error.response.data.message)
     }
 })
 
-export const productSearch = createAsyncThunk('searchProduct', async (keyword, thunkApi) => {
-    try {
-        let response = await axiosInstance.get(`/products?keyword=${keyword}`)
-        return response.data.data
-    } catch (error) {
-        return thunkApi.rejectWithValue(error.response.data.message)
-    }
-})
+
+
 
 export const productDetails = createAsyncThunk('getProductDetails', async (id, thunkApi) => {
     try {
@@ -39,10 +33,11 @@ export const productDetails = createAsyncThunk('getProductDetails', async (id, t
 let initialState = {
     products: [],
     productDetail: null,
-    loading: false,
+    isLoading: false,
     error: null,
-    productCount: null,
-    resultPerPage: null
+    productCount: 0,
+    resultPerPage: 0,
+    filterProductCount: 0
 
 }
 
@@ -51,55 +46,41 @@ const productSlice = createSlice({
     initialState,
     extraReducers: (builder) => {
         builder
-            //get All Products
+            //get All Products , priceFilter, pagination
             .addCase(AllProducts.pending, state => {
-                state.loading = true
+                state.isLoading = true
                 state.error = null
             })
             .addCase(AllProducts.fulfilled, (state, actions) => {
-                state.loading = false
-                state.productCount = actions.payload.productCount
-                state.products = actions.payload.allProducts
-                state.resultPerPage = actions.payload.resultPerPage
+                state.isLoading = false
+                state.products = actions.payload.allProducts || []
+                state.productCount = actions.payload.productCount || 0
+                state.resultPerPage = actions.payload.resultPerPage || 0
+                state.filterProductCount = actions.payload.filterProductCount || 0
                 // console.log(actions.payload)
             })
             .addCase(AllProducts.rejected, (state, actions) => {
                 state.error = actions.payload
                 state.products = null
-                // state.loading = false
+                state.isLoading = false
             })
 
-            //search product
-            .addCase(productSearch.pending, state => {
-                state.loading = true
-                state.error = null
-            })
-            .addCase(productSearch.fulfilled, (state, actions) => {
-                state.loading = false
-                state.productCount = actions.payload.productCount
-                state.products = actions.payload.allProducts
-                state.resultPerPage = actions.payload.resultPerPage
-                // console.log(actions.payload)
-            })
-            .addCase(productSearch.rejected, (state, actions) => {
-                state.error = actions.payload
-                state.products = null
-                // state.loading = false
-            })
+
 
             //product Details
             .addCase(productDetails.pending, (state) => {
-                state.loading = true;
+                state.isLoading = true;
                 state.error = null;
             })
             .addCase(productDetails.fulfilled, (state, action) => {
-                state.loading = false;
+                state.isLoading = false;
                 state.productDetail = action.payload;
             })
             .addCase(productDetails.rejected, (state, action) => {
-                state.loading = false;
+                state.isLoading = false;
                 state.error = action.payload;
             })
+
     }
 })
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Input from './common/Input';
+import Input from '../common/Input';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();

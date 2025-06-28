@@ -1,7 +1,7 @@
 import './home.css'
 import { FaMouse, FaSearch, FaShoppingBag, FaChevronRight } from 'react-icons/fa'
 import Product from '../pages/ProductCard'
-import { AllProducts, productSearch } from '../features/productlice/productSlice'
+import { AllProducts } from '../features/productlice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -22,18 +22,23 @@ function Home() {
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        // console.log(searchQuery)
-        dispatch(productSearch(searchQuery))
-        navigate(`search/products?keyword=${searchQuery}`)
-    }
-    useEffect(() => {
-        dispatch(AllProducts())
-    }, [dispatch])
+        e.preventDefault();
+        dispatch(AllProducts({
+            keyword: searchQuery,
+            price: [0, 100000],
+            page: 1,
+            category: ''
+        }));
+        navigate('/products', { state: searchQuery });
+    };
 
-    // const filteredProducts = products?.filter(product =>
-    //     product.name.toLowerCase().includes(searchQuery.toLowerCase())
-    // );
+    useEffect(() => {
+        dispatch(AllProducts({
+            keyword: '',
+            price: [0, 100000],
+            page: 1
+        }));
+    }, [dispatch]);
 
     return (
         <div className="min-h-screen bg-gray-50">

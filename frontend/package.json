@@ -31,6 +31,7 @@
     "react-star-ratings": "^2.3.0",
     "react-stars": "^2.2.5",
     "slick-carousel": "^1.8.1",
+    "use-debounce": "^10.0.5",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {

@@ -39,27 +39,32 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 //getProducts
 const getAllProducts = asyncHandler(async (req, res) => {
-
     let resultPerPage = 8;
     const productCount = await Product.countDocuments();
+
     const apiFeatures = new ApiFeatures(Product.find(), req.query)
         .search()
-        .filter()
-        .pagination(resultPerPage);
-    // console.log('api', apiFeatures)
-    const allProducts = await apiFeatures.query;
+        .filter();
 
-    // console.log('Number of products found:', allProducts.length);
-    // console.log('Products:', allProducts);
+    let products = await apiFeatures.query;
+    let filterProductCount = products.length;
+
+    apiFeatures.pagination(resultPerPage);
+    const allProducts = await apiFeatures.query.clone();
 
     if (!allProducts) {
-        throw ApiError(404, 'all product not get something went wrong')
+        throw new ApiError(404, 'All products not fetched, something went wrong');
     }
 
     res.status(200).json(
-        new ApiResponse(200, { allProducts, productCount, resultPerPage }, "all product fetch successfully")
-    )
-})
+        new ApiResponse(
+            200,
+            { allProducts, productCount, resultPerPage, filterProductCount },
+            "All products fetched successfully"
+        )
+    );
+});
+
 
 //delete product
 const deleteProduct = asyncHandler(async (req, res) => {

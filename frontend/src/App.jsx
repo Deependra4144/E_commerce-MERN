@@ -1,17 +1,16 @@
 import { useEffect } from 'react'
-import Header from './components/layout/header/Header.jsx'
-import { BrowserRouter, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import webFont from 'webfontloader'
-import Layout from './components/layout/Layout.jsx'
-import { RouterProvider } from 'react-router-dom'
-import Home from './components/Home.jsx'
-import About from './components/About.jsx'
-import ProductDetails from './pages/ProductDetails.jsx'
-import Products from './components/Products.jsx'
-import Cart from './components/Cart.jsx'
-import Search from './components/Search.jsx'
-import Login from './components/Login.jsx'
-import Register from './components/user/Register.jsx'
+import {
+  About,
+  Cart,
+  Home,
+  Products,
+  ProductDetails,
+  Register,
+  Login,
+  Layout
+} from './components/Index'
 function App() {
   const router = createBrowserRouter([{
     path: "/",
@@ -24,10 +23,6 @@ function App() {
       {
         path: '/products',
         element: <Products />
-      },
-      {
-        path: '/search/products',
-        element: <Search />
       },
       {
         path: '/about',
@@ -51,6 +46,7 @@ function App() {
       },
     ]
   }])
+
   useEffect(() => {
     webFont.load({
       google: {
