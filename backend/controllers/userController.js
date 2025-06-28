@@ -9,11 +9,9 @@ import { uploadOnCloudinary } from '../utils/cloudinary.js'
 
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
-    console.log('req.file:', req.file);
-    console.log('req.body:', req.body);
     const { name, email, phone, password, role } = req.body;
-
     let existedUser = await User.findOne({ email })
+
     if (existedUser) {
         throw new ApiError(400, 'user allready exist !!')
     }
@@ -43,7 +41,8 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'User not registered. Internal server error');
     }
 
-    sendToken(user, 201, res)
+    let createdUser = await User.findOne(user._id).select("-password -refreshToken")
+    sendToken(createdUser, 201, res)
 });
 
 const loginUser = asyncHandler(async (req, res) => {
