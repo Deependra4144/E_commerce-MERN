@@ -3,20 +3,25 @@ import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import Input from '../common/Input';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../features/auth/authSlice';
 
 const Login = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
-    // error state can be used for server/API errors
+    let dispatch = useDispatch()
 
-
+    const submitToLogin = (data) => {
+        // console.log(data)
+        dispatch(loginUser(data))
+    }
 
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 py-12 px-4">
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
                 <h2 className="text-3xl font-bold text-center text-blue-700 mb-8">Login</h2>
-                <form onSubmit={handleSubmit(data => console.log(data))} className="space-y-6">
+                <form onSubmit={handleSubmit(data => submitToLogin(data))} className="space-y-6">
                     {/* Email Input */}
                     <Input
                         label="Email"

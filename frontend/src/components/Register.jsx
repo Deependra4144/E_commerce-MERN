@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaUser, FaEnvelope, FaPhone, FaLock, FaUserTag } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import Input from './common/Input';
 
 const roles = [
@@ -10,22 +11,23 @@ const roles = [
 ];
 
 const Register = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+    const [apiError, setApiError] = useState('');
 
     const onSubmit = (data) => {
         setLoading(true);
-        setError('');
+        setApiError('');
         // Simulate registration
         setTimeout(() => {
             setLoading(false);
             if (!data.name || !data.email || !data.phone || !data.password || !data.role) {
-                setError('Please fill all fields.');
+                setApiError('Please fill all fields.');
             } else {
                 // Handle registration logic here
-                alert('Registered!');
+                alert('Registered successfully!');
+                reset();
             }
         }, 1200);
     };
@@ -48,6 +50,7 @@ const Register = () => {
                             minLength: { value: 2, message: 'Name must be at least 2 characters' },
                         })}
                     />
+
                     {/* Email Input */}
                     <Input
                         label="Email"
@@ -64,6 +67,7 @@ const Register = () => {
                             },
                         })}
                     />
+
                     {/* Phone Input */}
                     <Input
                         label="Phone"
@@ -80,6 +84,7 @@ const Register = () => {
                             },
                         })}
                     />
+
                     {/* Password Input */}
                     <div className="relative">
                         <Input
@@ -106,6 +111,7 @@ const Register = () => {
                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                         </button>
                     </div>
+
                     {/* Role Select */}
                     <div className="relative">
                         <select
@@ -125,8 +131,10 @@ const Register = () => {
                         </label>
                         {errors.role && <span className="text-xs text-red-500 absolute left-4 -bottom-5">{errors.role.message}</span>}
                     </div>
-                    {/* Error Message */}
-                    {error && <div className="text-red-600 text-sm text-center">{error}</div>}
+
+                    {/* API Error Message */}
+                    {apiError && <div className="text-red-600 text-sm text-center">{apiError}</div>}
+
                     {/* Register Button */}
                     <button
                         type="submit"
@@ -142,6 +150,12 @@ const Register = () => {
                         Register
                     </button>
                 </form>
+
+                {/* Login Link */}
+                <div className="mt-6 text-center text-gray-600 text-sm">
+                    Already have an account?{' '}
+                    <Link to="/login" className="text-blue-600 hover:underline font-semibold">Login</Link>
+                </div>
             </div>
         </div>
     );

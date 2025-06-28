@@ -5,31 +5,38 @@ import { User } from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
 import { sendEmail } from "../utils/sendEmail.js"
 import crypto from "crypto"
+import { uploadOnCloudinary } from '../utils/cloudinary.js'
 
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
+    console.log('req.file:', req.file);
+    console.log('req.body:', req.body);
     const { name, email, phone, password, role } = req.body;
 
     let existedUser = await User.findOne({ email })
-    // console.log('yes')
     if (existedUser) {
         throw new ApiError(400, 'user allready exist !!')
     }
 
-    if ([name, email, phone, password, role].some(v => !v)) {
-        throw new ApiError(400, 'Invalid credentials');
+    if ([name, email, phone, password, role].some(v => v.trim() == "")) {
+        throw new ApiError(400, 'All field is required');
     }
 
+    const avatarLocalPath = req.file?.path;
+    if (!avatarLocalPath) {
+        throw new ApiError(400, 'Avatar file is required !!')
+    }
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+    if (!avatar) {
+        throw new ApiError(400, 'Avatar is required')
+    }
     const user = await User.create({
         name,
         email,
         phone,
         password,
         role,
-        avatar: {
-            public_id: 'this is sample id',
-            url: 'profileURL'
-        }
+        avatar: avatar.url
     });
 
     if (!user) {
