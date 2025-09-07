@@ -14,7 +14,11 @@ class ApiFeatures {
 
         // console.log('keyword is', keyword)
 
-        this.query = this.query.find({ ...keyword })
+        this.query = this.query.find({
+            ...this.query.getQuery(),
+            ...keyword
+        });
+
         return this
     }
 

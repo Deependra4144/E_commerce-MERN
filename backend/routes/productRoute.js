@@ -10,10 +10,10 @@ import {
     updateProduct
 } from '../controllers/productController.js'
 import { isAuthenticatedUser, authorizeRoles } from '../middleware/auth.js';
-
+import { upload } from '../middleware/multer.js'
 const router = express.Router()
 
-router.route('/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), createProduct)
+router.route('/product/new').post(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images', 4), createProduct)
 router.route('/products').get(getAllProducts);
 router.route('/product/:id').get(getProductDetails);
 

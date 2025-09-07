@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { productDetails } from "../features/productlice/productSlice";
+import { productDetails } from "../../features/productlice/productSlice";
 import StarRatings from "react-star-ratings";
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";

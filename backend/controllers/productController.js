@@ -3,10 +3,29 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { Product } from '../models/productModel.js'
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiFeatures } from '../utils/ApiFeatures.js'
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
 
 // create product --Admin
 const createProduct = asyncHandler(async (req, res) => {
     req.body.user = req.user.id;
+
+    if (req.files && req.files.length > 0) {
+        //upload images on cloudinary
+        const uploadedImages = await Promise.all(
+            req.files.map(async (file) => {
+                const img = await uploadOnCloudinary(file.path)
+                return img.url
+            })
+        )
+        console.log(uploadedImages, 'abc')
+        if (!uploadedImages) {
+            throw new ApiError(401, 'product image is required !!')
+        }
+        req.body.images = uploadedImages
+    }
+    // console.log('ram ram', req.body)
+    // console.log(req.body)
+
     const product = await Product.create(req.body);
     // console.log(product)
     if (!product) {

@@ -1,22 +1,37 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../common/Input';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../features/auth/authSlice';
+import { useEffect } from 'react';
 
 const Login = () => {
+    const navigate = useNavigate()
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [showPassword, setShowPassword] = useState(false);
+    const { isAuthenticate, user, isLoading, error } = useSelector(state => state.auth)
     let dispatch = useDispatch()
 
     const submitToLogin = (data) => {
         // console.log(data)
         dispatch(loginUser(data))
+
     }
 
+    useEffect(() => {
+        if (isAuthenticate && user) {
+            navigate('/userAccount');
+        }
+    }, [isAuthenticate, user, navigate]);
 
+    if (isLoading) {
+        <p className="text-sm text-gray-600 text-center">Loggin....</p>
+    }
+    if (error) {
+        { error && <p className="text-sm text-red-600 text-center">{error}</p> }
+    }
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300 py-12 px-4">
             <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from "../../services/axiosInstance"
 
 export const registerUser = createAsyncThunk('auth/register', async (userData, thunkApi) => {
-    console.log('Sending userData:', userData)
+    // console.log('Sending userData:', userData)
     // for (let [key, value] of userData.entries()) {
     //     console.log(`${key}:`, value);
     // }
@@ -37,13 +37,29 @@ export const loginUser = createAsyncThunk('auth/loginUser', async (credential, t
     }
 })
 
+export const isLogin = createAsyncThunk('auth/me', async (_, thunkapi) => {
+    try {
+        let response = await axiosInstance.get('/users/me')
+        return response.data
+    } catch (error) {
+        return thunkapi.rejectWithValue(error.response.data.message)
+    }
+})
 
-
+export const logOutUser = createAsyncThunk('auth/logOut', async (_, thunkApi) => {
+    try {
+        let response = await axiosInstance.get('/users/logout')
+        return response.data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.data.message)
+    }
+})
 let initialState = {
     isAuthenticate: false,
     user: null,
-    loading: false,
-    error: null
+    isLoading: false,
+    error: null,
+    userRole: null
 }
 const authSlice = createSlice({
     name: "auth",
@@ -57,12 +73,13 @@ const authSlice = createSlice({
         builder
             // register
             .addCase(registerUser.pending, (state) => {
-                state.loading = true,
+                state.isLoading = true,
                     state.error = null
             })
             .addCase(registerUser.fulfilled, (state, actions) => {
-                state.loading = false,
-                    state.user = actions.payload.data
+                state.isLoading = false
+                state.user = actions.payload.data
+                state.userRole = state.user.role
                 // console.log(actions.payload.data)
             })
             .addCase(registerUser.rejected, (state, actions) => {
@@ -72,23 +89,57 @@ const authSlice = createSlice({
 
             //login
             .addCase(loginUser.pending, (state) => {
-                state.loading = true
+                state.isLoading = true
                 state.error = null
             })
             .addCase(loginUser.fulfilled, (state, actions) => {
-                state.loading = false
+                state.isLoading = false
                 state.user = actions.payload.data
                 state.isAuthenticate = true
-                localStorage.setItem('token', actions.payload.token)
+                state.userRole = state.user.role
             })
             .addCase(loginUser.rejected, (state, actions) => {
                 state.user = null
-                state.loading = false
+                state.isLoading = false
                 state.isAuthenticate = false;
 
                 state.error = actions.payload
             })
 
+            // get user Details if user is allreday login
+            .addCase(isLogin.pending, state => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(isLogin.fulfilled, (state, actions) => {
+                state.isLoading = false
+                state.error = null
+                state.isAuthenticate = true
+                state.user = actions.payload.data
+                state.userRole = state.user.role
+            })
+            .addCase(isLogin.rejected, (state, actions) => {
+                state.isLoading = false
+                state.error = actions.payload
+                state.isAuthenticate = false
+                state.user = null
+            })
+
+            //log out user
+            .addCase(logOutUser.pending, state => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(logOutUser.fulfilled, (state) => {
+                state.isLoading = false
+                state.user = null
+                state.isAuthenticate = false
+                state.userRole = null
+            })
+            .addCase(logOutUser.rejected, (state, actions) => {
+                state.isLoading = false
+                state.error = actions.payload
+            })
     }
 })
 

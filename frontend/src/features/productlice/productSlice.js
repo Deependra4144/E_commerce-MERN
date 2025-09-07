@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from "../../services/axiosInstance"
 
-export const AllProducts = createAsyncThunk('getProducts', async (filter, thunkApi) => {
-    console.log(filter)
+export const getProducts = createAsyncThunk('getProducts', async (filter, thunkApi) => {
+    // console.log(filter)
     try {
         if (filter.category) {
             let response = await axiosInstance.get(`/products?keyword=${filter.keyword}&page=${filter.page}&price[gte]=${filter.price[0]}&price[lte]=${filter.price[1]}&category=${filter.category}&ratings[gte]=${filter.ratings}`)
@@ -30,6 +30,7 @@ export const productDetails = createAsyncThunk('getProductDetails', async (id, t
     }
 })
 
+
 let initialState = {
     products: [],
     productDetail: null,
@@ -47,11 +48,11 @@ const productSlice = createSlice({
     extraReducers: (builder) => {
         builder
             //get All Products , priceFilter, pagination
-            .addCase(AllProducts.pending, state => {
+            .addCase(getProducts.pending, state => {
                 state.isLoading = true
                 state.error = null
             })
-            .addCase(AllProducts.fulfilled, (state, actions) => {
+            .addCase(getProducts.fulfilled, (state, actions) => {
                 state.isLoading = false
                 state.products = actions.payload.allProducts || []
                 state.productCount = actions.payload.productCount || 0
@@ -59,7 +60,7 @@ const productSlice = createSlice({
                 state.filterProductCount = actions.payload.filterProductCount || 0
                 // console.log(actions.payload)
             })
-            .addCase(AllProducts.rejected, (state, actions) => {
+            .addCase(getProducts.rejected, (state, actions) => {
                 state.error = actions.payload
                 state.products = null
                 state.isLoading = false

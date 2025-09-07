@@ -1,8 +1,8 @@
 import './pagination.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AllProducts } from '../features/productlice/productSlice';
-import ProductCard from '../pages/ProductCard';
+import { getProducts } from '../features/productlice/productSlice';
+import ProductCard from './pages/ProductCard';
 import Pagination from "react-js-pagination";
 import { useDebounce } from 'use-debounce';
 import Slider from "@mui/material/Slider";
@@ -18,7 +18,7 @@ function Products() {
     const [ratings, setRatings] = useState(0)
     const [queryKeyword, setQueryKeyword] = useState(location.state || '')
     const [selectcategorie, setSelectCategorie] = useState()
-    const [price, setPrice] = useState([0, 5000]);
+    const [price, setPrice] = useState([0, 200000]);
     const [debouncePrice] = useDebounce(price, 800);
     const [showSidebar, setShowSidebar] = useState(false);
     const { products, loading, error, resultPerPage, filterProductCount } = useSelector(state => state.product);
@@ -44,7 +44,7 @@ function Products() {
     };
 
     useEffect(() => {
-        dispatch(AllProducts({
+        dispatch(getProducts({
             keyword: queryKeyword,
             page: currentPage,
             price: debouncePrice,
@@ -60,6 +60,7 @@ function Products() {
         ratings
     ]);
 
+    products.forEach(pr => pr.images.forEach(img => console.log(img)))
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
@@ -134,7 +135,7 @@ function Products() {
                                     valueLabelDisplay='auto'
                                     aria-labelledby='range-slider'
                                     min={0}
-                                    max={5000}
+                                    max={200000}
                                     sx={{
                                         color: '#2563eb',
                                         '& .MuiSlider-thumb': {

@@ -4,10 +4,13 @@ import { FaRegUser, FaSearch } from "react-icons/fa";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const { isAuthenticate, user, isLoading, error } = useSelector(state => state.auth)
+    // console.log(isAuthenticate, isLoading, user, error)
 
     useEffect(() => {
         const handleScroll = () => {
@@ -25,6 +28,14 @@ function Header() {
         { name: 'Contact', to: '/contact' },
     ];
 
+    if (isLoading) {
+        <p className="text-sm text-gray-600 text-center">Loggin...</p>
+
+    }
+    if (error) {
+        <p className="text-sm text-red-600 text-center">{error}</p>
+
+    }
     return (
         <nav className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${isScrolled
             ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200'
@@ -74,15 +85,22 @@ function Header() {
                         <button className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
                             <FaSearch className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
                         </button>
-                        <Link to="/login" className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
-                            <FaRegUser className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
-                        </Link>
                         <Link to='/cart' className="relative p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
                             <BsCart3 className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
                             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate-pulse">
                                 3
                             </span>
                         </Link>
+                        {isAuthenticate ?
+                            <Link to='/userAccount' className='p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group'>
+                                <img src={user.avatar} alt="" className="w-7 h-7 group-hover:scale-110 transition-transform rounded-full duration-300" />
+                            </Link>
+                            :
+                            <Link to="/login" className="p-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 hover:scale-110 group">
+                                <FaRegUser className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
+                            </Link>
+                        }
+
                     </div>
 
                     {/* Mobile menu button */}

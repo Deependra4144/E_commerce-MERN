@@ -1,5 +1,4 @@
-import express, { Router } from 'express'
-import multer from 'multer';
+import { Router } from 'express'
 import {
     deleteUser,
     forgetPassword,

@@ -23,6 +23,7 @@ const ProductCard = ({ product }) => {
         return Math.round(discount);
     };
 
+    // console.log(product.images)
     return (
         <Link to={`/product/${product._id}`} className="block">
             <div className="group bg-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300">

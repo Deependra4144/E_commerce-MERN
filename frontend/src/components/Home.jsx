@@ -1,7 +1,7 @@
 import './home.css'
 import { FaMouse, FaSearch, FaShoppingBag, FaChevronRight } from 'react-icons/fa'
-import Product from '../pages/ProductCard'
-import { AllProducts } from '../features/productlice/productSlice'
+import Product from './pages/ProductCard'
+import { getProducts } from '../features/productlice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -23,7 +23,7 @@ function Home() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(AllProducts({
+        dispatch(getProducts({
             keyword: searchQuery,
             price: [0, 100000],
             page: 1,
@@ -33,7 +33,7 @@ function Home() {
     };
 
     useEffect(() => {
-        dispatch(AllProducts({
+        dispatch(getProducts({
             keyword: '',
             price: [0, 100000],
             page: 1,
