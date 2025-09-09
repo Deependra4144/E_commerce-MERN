@@ -59,8 +59,8 @@ function Products() {
         queryKeyword,
         ratings
     ]);
-
-    products.forEach(pr => pr.images.forEach(img => console.log(img)))
+    console.log(products)
+    // products.forEach(pr => pr.images.forEach(img => console.log(img)))
     if (loading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">

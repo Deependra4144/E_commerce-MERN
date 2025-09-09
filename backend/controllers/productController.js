@@ -14,10 +14,11 @@ const createProduct = asyncHandler(async (req, res) => {
         const uploadedImages = await Promise.all(
             req.files.map(async (file) => {
                 const img = await uploadOnCloudinary(file.path)
+                // console.log('pr images', img)
                 return img.url
             })
         )
-        console.log(uploadedImages, 'abc')
+        // console.log(uploadedImages, 'abc')
         if (!uploadedImages) {
             throw new ApiError(401, 'product image is required !!')
         }

@@ -26,6 +26,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         dispatch(productDetails(id));
+
     }, [dispatch, id]);
 
     const handleQuantityChange = (change) => {
@@ -90,7 +91,7 @@ const ProductDetails = () => {
                                     {productDetail.images.map((img, index) => (
                                         <div key={index} className="aspect-square">
                                             <img
-                                                src={img.url}
+                                                src={img}
                                                 alt={`${productDetail.name} ${index + 1}`}
                                                 className="object-contain w-full h-full"
                                             />

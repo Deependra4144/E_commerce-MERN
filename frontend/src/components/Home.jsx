@@ -1,10 +1,10 @@
 import './home.css'
 import { FaMouse, FaSearch, FaShoppingBag, FaChevronRight } from 'react-icons/fa'
-import Product from './pages/ProductCard'
 import { getProducts } from '../features/productlice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import ProductCard from './pages/ProductCard'
 
 const categories = [
     { name: 'Electronics', icon: '📱' },
@@ -20,7 +20,6 @@ function Home() {
     const dispatch = useDispatch();
     const { products, loading } = useSelector(state => state.product);
     const [searchQuery, setSearchQuery] = useState('');
-
     const handleSubmit = (e) => {
         e.preventDefault();
         dispatch(getProducts({
@@ -35,9 +34,10 @@ function Home() {
     useEffect(() => {
         dispatch(getProducts({
             keyword: '',
-            price: [0, 100000],
             page: 1,
-            ratings: 4
+            price: [0, 200000],
+            category: '',
+            ratings: 0
         }));
     }, [dispatch]);
 
@@ -145,7 +145,7 @@ function Home() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {products.map((product, index) => (
-                            <Product key={product._id || index} product={product} />
+                            <ProductCard key={product._id || index} product={product} />
                         ))}
                     </div>
                 )}

@@ -23,7 +23,7 @@ const ProductCard = ({ product }) => {
         return Math.round(discount);
     };
 
-    // console.log(product.images)
+    // console.log(Array.isArray(product.images));
     return (
         <Link to={`/product/${product._id}`} className="block">
             <div className="group bg-gray-100 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300">
@@ -33,7 +33,7 @@ const ProductCard = ({ product }) => {
                         {product.images.map((img, index) => (
                             <div key={index} className="aspect-square">
                                 <img
-                                    src={img.url}
+                                    src={img}
                                     alt={img.name}
                                     className="w-full h-full object-cover"
                                 />

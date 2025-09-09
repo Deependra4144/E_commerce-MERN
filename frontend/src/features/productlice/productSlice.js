@@ -33,7 +33,7 @@ export const productDetails = createAsyncThunk('getProductDetails', async (id, t
 
 let initialState = {
     products: [],
-    productDetail: null,
+    productinDetail: null,
     isLoading: false,
     error: null,
     productCount: 0,
