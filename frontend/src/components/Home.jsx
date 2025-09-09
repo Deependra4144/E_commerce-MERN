@@ -4,7 +4,7 @@ import { getProducts } from '../features/productlice/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ProductCard from './pages/ProductCard'
+import ProductCard from './pages/productPages/ProductCard'
 
 const categories = [
     { name: 'Electronics', icon: '📱' },
@@ -18,7 +18,7 @@ const categories = [
 function Home() {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { products, loading } = useSelector(state => state.product);
+    const { products, isLoading } = useSelector(state => state.product);
     const [searchQuery, setSearchQuery] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -138,7 +138,7 @@ function Home() {
                     <div className="w-20 h-1 bg-blue-500 mx-auto rounded-full"></div>
                 </div>
 
-                {loading ? (
+                {isLoading ? (
                     <div className="flex justify-center items-center min-h-[200px]">
                         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                     </div>

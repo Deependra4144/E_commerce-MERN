@@ -33,10 +33,10 @@ const AccountDetail = () => {
                             <h1 className="text-3xl font-bold text-gray-900">Account Details</h1>
                             <p className="text-gray-600 mt-1">Manage your profile information</p>
                         </div>
-                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
+                        <Link to="/edit-profile" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
                             <FaEdit className="text-sm" />
                             Edit Profile
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -161,14 +161,14 @@ const AccountDetail = () => {
                             <h3 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <Link to='/addProduct' className="p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
+                                <Link to='/addProduct' className="p-4 text-center bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
                                     Add Product
+                                </Link>
+                                <Link to='/allProduct' className="text-center p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
+                                    All Products
                                 </Link>
                                 <button className="p-4 bg-green-50 hover:bg-green-100 text-green-700 rounded-xl transition-colors duration-200 font-medium">
                                     My Reviews
-                                </button>
-                                <button className="p-4 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl transition-colors duration-200 font-medium">
-                                    Wishlist
                                 </button>
                                 <button className="p-4 bg-orange-50 hover:bg-orange-100 text-orange-700 rounded-xl transition-colors duration-200 font-medium">
                                     Settings

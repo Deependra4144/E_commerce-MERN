@@ -11,11 +11,13 @@ import {
   Register,
   Login,
   Layout,
-  Addproduct
+  Addproduct,
+  EditProfile
 } from './components/Index'
 import { useDispatch, useSelector } from 'react-redux'
 import { isLogin } from './features/auth/authSlice'
 import { Navigate } from 'react-router-dom';
+import AllProducts from './components/pages/adminPages/AllProducts'
 function App() {
   let dispatch = useDispatch()
   const { isAuthenticate, userRole } = useSelector(state => state.auth);
@@ -68,6 +70,14 @@ function App() {
       {
         path: '/addProduct',
         element: <ProtectedAdminRoute> <Addproduct /> </ProtectedAdminRoute>
+      },
+      {
+        path: '/allProduct',
+        element: <ProtectedAdminRoute> <AllProducts /> </ProtectedAdminRoute>
+      },
+      {
+        path: '/edit-profile',
+        element: <ProtectedAdminRoute><EditProfile /></ProtectedAdminRoute>
       },
     ]
   }])

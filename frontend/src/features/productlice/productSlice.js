@@ -17,9 +17,6 @@ export const getProducts = createAsyncThunk('getProducts', async (filter, thunkA
     }
 })
 
-
-
-
 export const productDetails = createAsyncThunk('getProductDetails', async (id, thunkApi) => {
     try {
         let response = await axiosInstance.get(`/product/${id}`)
@@ -31,9 +28,10 @@ export const productDetails = createAsyncThunk('getProductDetails', async (id, t
 })
 
 
+
 let initialState = {
     products: [],
-    productinDetail: null,
+    productiDetail: null,
     isLoading: false,
     error: null,
     productCount: 0,
@@ -67,7 +65,6 @@ const productSlice = createSlice({
             })
 
 
-
             //product Details
             .addCase(productDetails.pending, (state) => {
                 state.isLoading = true;
@@ -75,12 +72,14 @@ const productSlice = createSlice({
             })
             .addCase(productDetails.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.productDetail = action.payload;
+                state.productiDetail = action.payload;
             })
             .addCase(productDetails.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })
+
+        // delete Product by Admin
 
     }
 })
