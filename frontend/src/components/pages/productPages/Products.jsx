@@ -17,11 +17,11 @@ function Products() {
     const [currentPage, setCurrentPage] = useState(1);
     const [ratings, setRatings] = useState(0)
     const [queryKeyword, setQueryKeyword] = useState(location.state || '')
-    const [selectcategorie, setSelectCategorie] = useState()
+    const [selectcategorie, setSelectCategorie] = useState('')
     const [price, setPrice] = useState([0, 200000]);
     const [debouncePrice] = useDebounce(price, 800);
     const [showSidebar, setShowSidebar] = useState(false);
-    const { products, loading, error, resultPerPage, filterProductCount } = useSelector(state => state.product);
+    const { products, isLoading, error, resultPerPage, filterProductCount } = useSelector(state => state.product);
 
 
     const Categories = [
@@ -38,6 +38,13 @@ function Products() {
         setCurrentPage(page);
     };
 
+    console.log(location.state, products)
+
+    useEffect(() => {
+        if (location.state) {
+            setQueryKeyword(location.state)
+        }
+    }, [location.state])
     useEffect(() => {
         dispatch(getProducts({
             keyword: queryKeyword,
@@ -46,9 +53,6 @@ function Products() {
             category: selectcategorie,
             ratings
         }));
-        if (location.state) {
-            setQueryKeyword(location.state)
-        }
 
     }, [
         debouncePrice,
@@ -56,12 +60,11 @@ function Products() {
         dispatch,
         selectcategorie,
         queryKeyword,
-        ratings,
-        location.state
+        ratings
     ]);
     // console.log(products)
     // products.forEach(pr => pr.images.forEach(img => console.log(img)))
-    if (loading) {
+    if (isLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
                 <div className="text-center">
@@ -220,7 +223,7 @@ function Products() {
                             <button
                                 className="w-full py-2.5 sm:py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg sm:rounded-xl hover:bg-gray-200 transition-colors text-sm sm:text-base"
                                 onClick={() => {
-                                    setPrice([0, 5000]);
+                                    setPrice([0, 200000]);
                                     setRatings(0);
                                     setSelectCategorie('');
                                 }}

@@ -66,6 +66,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
         .search()
         .filter();
 
+    // console.log(await apiFeatures.query, 'ABCD')
     let products = await apiFeatures.query;
     let filterProductCount = products.length;
 

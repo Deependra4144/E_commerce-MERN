@@ -22,12 +22,6 @@ function Home() {
     const [searchQuery, setSearchQuery] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(getProducts({
-            keyword: searchQuery,
-            price: [0, 100000],
-            page: 1,
-            category: ''
-        }));
         navigate('/products', { state: searchQuery });
     };
 
