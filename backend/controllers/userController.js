@@ -5,7 +5,7 @@ import { User } from "../models/userModel.js";
 import sendToken from "../utils/jwtToken.js";
 import { sendEmail } from "../utils/sendEmail.js"
 import crypto from "crypto"
-import { uploadOnCloudinary } from '../utils/cloudinary.js'
+import { deleteFromCloudinary, uploadOnCloudinary } from '../utils/cloudinary.js'
 
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
@@ -187,14 +187,30 @@ const updatePassword = asyncHandler(async (req, res) => {
 //updateProfile
 const updateProfile = asyncHandler(async (req, res) => {
 
+    let user = await User.findById(req.user.id)
+    if (!user) {
+        throw new ApiError(404, 'user not found')
+    }
     const newUserData = {
         name: req.body.name,
-        email: req.body.email
+        email: req.body.email,
+        phone: req.body.phone
     }
 
-    // we will add cloudinary later
+    if (req.file) {
+        if (user.avatar && user.avatar.public_id) {
+            await deleteFromCloudinary(user.avatar.public_id)
+        }
+        const img = await uploadOnCloudinary(req.file.path)
+        if (!img) {
+            throw new ApiError(400, 'image not upload on cloudinary')
+        }
+        newUserData.avatar = img.url
+    }
 
-    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+
+    console.log(newUserData)
+    const updatedUser = await User.findByIdAndUpdate(user?.id, newUserData, {
         new: true,
         runValidators: true,
         useFindAndModify: false
@@ -202,7 +218,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     res.status(200).json(
         new ApiResponse(
             200,
-            user,
+            updatedUser,
             "user update successfully !!"
         )
     )

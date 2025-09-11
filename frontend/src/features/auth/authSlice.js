@@ -54,6 +54,16 @@ export const logOutUser = createAsyncThunk('auth/logOut', async (_, thunkApi) =>
         return thunkApi.rejectWithValue(error.response.data.message)
     }
 })
+
+export const updateProfile = createAsyncThunk('auth/updateProfile', async (userData, thunkApi) => {
+    try {
+        let response = await axiosInstance.put('/users/me/updateProfile', userData)
+        return response.data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.data.message)
+    }
+})
+
 let initialState = {
     isAuthenticate: false,
     user: null,
@@ -123,6 +133,22 @@ const authSlice = createSlice({
                 state.error = actions.payload
                 state.isAuthenticate = false
                 state.user = null
+            })
+
+            //update profile
+            .addCase(updateProfile.pending, state => {
+                state.isLoading = true
+                state.error = null
+            })
+            .addCase(updateProfile.fulfilled, (state, actions) => {
+                state.isLoading = false
+                state.user = actions.payload
+                state.user = actions.payload.data;
+                state.userRole = state.user.role
+            })
+            .addCase(updateProfile.rejected, (state, actions) => {
+                state.error = actions.payload
+                state.isLoading = false
             })
 
             //log out user

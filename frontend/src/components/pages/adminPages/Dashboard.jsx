@@ -25,12 +25,12 @@ function Dashboard() {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/allProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
+                                <NavLink to="/admin/allProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
                                     <span>All Products</span>
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/addProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
+                                <NavLink to="/admin/addProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
                                     <span>Add Product</span>
                                 </NavLink>
                             </li>

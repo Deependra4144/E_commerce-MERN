@@ -1,32 +1,56 @@
 import React, { useMemo } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-
+import { useDispatch, useSelector } from 'react-redux'
+import { updateProfile } from '../../../../features/auth/authSlice'
+import toast from 'react-hot-toast'
 function EditProfile() {
-    const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm()
-    const avatarFiles = watch('avatar')
+    const dispatch = useDispatch()
+    const { user } = useSelector(state => state.auth)
+    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm()
+    const avatarFile = watch('avatar')
 
     const avatarPreview = useMemo(() => {
-        if (avatarFiles && avatarFiles.length > 0) {
-            return URL.createObjectURL(avatarFiles[0])
+
+        if (avatarFile) {
+            return URL.createObjectURL(avatarFile[0])
         }
         return null
-    }, [avatarFiles])
+    }, [avatarFile])
 
     const onSubmit = async (data) => {
+
         const formData = new FormData()
         formData.append('name', data.name)
         formData.append('email', data.email)
         formData.append('phone', data.phone || '')
-        formData.append('bio', data.bio || '')
         if (data.avatar && data.avatar[0]) {
             formData.append('avatar', data.avatar[0])
+        } else {
+            formData.append('avatar', user.avatar)
         }
-        // TODO: Hook up to API/dispatch when available
-        // console.log('EditProfile submitted', data)
+
+        try {
+            let result = await dispatch(updateProfile(formData))
+            console.log(result)
+            toast.success('Profile update Successfuly')
+        } catch (err) {
+            toast.error(err.message)
+        }
     }
 
+    useEffect(() => {
+        if (user) {
+            reset({
+                name: user.name || '',
+                email: user.email || '',
+                phone: user.phone || '',
+            })
+        }
+    }, [user, reset])
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto bg-white/70 backdrop-blur-md shadow-xl rounded-2xl p-6 sm:p-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full bg-white/70 backdrop-blur-md shadow-xl rounded-2xl p-4 sm:p-6 md:p-8">
             <div className="mb-6 border-b pb-4">
                 <h2 className="text-2xl font-bold text-gray-900">Edit Profile</h2>
                 <p className="text-sm text-gray-600 mt-1">Update your personal information and avatar.</p>
@@ -38,11 +62,21 @@ function EditProfile() {
                     <div className="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
                         <p className="text-sm font-semibold text-gray-700 mb-4">Profile Picture</p>
                         <div className="flex flex-col items-center gap-4">
-                            <div className="w-32 h-32 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
-                                {avatarPreview ? (
-                                    <img src={avatarPreview} alt="avatar-preview" className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">No image</div>
+                            <div className="w-40 h-40 rounded-full overflow-hidden border border-gray-200 bg-gray-100">
+                                {/* Existing avater */}
+                                {!avatarPreview && user?.avatar && (
+                                    <img src={user.avatar} alt="Current Avatar" className="w-full h-full object-cover" />
+                                )}
+                                {/* New avater preview */}
+                                {avatarPreview && (
+                                    <img src={avatarPreview} alt="Current Avatar" className="w-full h-full object-cover" />
+                                )}
+
+                                {/* No image preview */}
+                                {!avatarPreview && !user?.avatar && (
+                                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                        No Image
+                                    </div>
                                 )}
                             </div>
                             <label className="w-full">
@@ -88,14 +122,7 @@ function EditProfile() {
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
-                            <textarea
-                                rows="4"
-                                {...register('bio')}
-                                className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30"
-                            />
-                        </div>
+
                     </div>
 
                     <div className="mt-6 flex items-center justify-end gap-3">

@@ -48,7 +48,7 @@ function EditProduct() {
             console.log(result)
             toast.success(success)
             setTimeout(() => {
-                navigate('/allProduct')
+                navigate('/admin/allProduct')
             }, 1000);
         } catch (err) {
             console.log(err.message)
@@ -98,7 +98,7 @@ function EditProduct() {
                             <div className="grid grid-cols-2 gap-2">
                                 {/* Existing Images */}
                                 {(!imageFiles && productiDetail?.images?.length) && productiDetail?.images?.map((img, index) => (
-                                    <div key={`existing-${index}`} className="w-full h-24 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                                    <div key={`existing-${index}`} className="w-full h-24 rounded-lg object-cover border border-gray-200 bg-gray-100">
                                         <img src={img} alt={`existing-${index}`} className="w-full h-full object-cover" />
                                     </div>
                                 ))}

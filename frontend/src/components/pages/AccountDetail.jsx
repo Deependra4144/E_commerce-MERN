@@ -161,10 +161,10 @@ const AccountDetail = () => {
                             <h3 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <Link to='/addProduct' className="p-4 text-center bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
+                                <Link to='/admin/addProduct' className="p-4 text-center bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
                                     Add Product
                                 </Link>
-                                <Link to='/allProduct' className="text-center p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
+                                <Link to='/admin/allProduct' className="text-center p-4 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl transition-colors duration-200 font-medium">
                                     All Products
                                 </Link>
                                 <button className="p-4 bg-green-50 hover:bg-green-100 text-green-700 rounded-xl transition-colors duration-200 font-medium">

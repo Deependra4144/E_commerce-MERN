@@ -72,11 +72,11 @@ function App() {
         element: <ProtectedRoute><AccountDetail /></ProtectedRoute>
       },
       {
-        path: '/addProduct',
+        path: '/admin/addProduct',
         element: <ProtectedAdminRoute> <Addproduct /> </ProtectedAdminRoute>
       },
       {
-        path: '/allProduct',
+        path: '/admin/allProduct',
         element: <ProtectedAdminRoute> <AllProducts /> </ProtectedAdminRoute>
       },
       {
