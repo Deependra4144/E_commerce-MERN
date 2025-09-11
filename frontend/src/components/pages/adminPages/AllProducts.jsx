@@ -4,9 +4,11 @@ import { getProducts } from '../../../features/productlice/productSlice'
 import Pagination from 'react-js-pagination'
 import StarRatings from 'react-star-ratings'
 import { deleteProduct } from '../../../features/productlice/adminProductSlice'
+import { Link } from 'react-router-dom'
 function AllProducts() {
 
     const [selectedProduct, setSelectedProduct] = useState(null)
+    const [refresh, setRefresh] = useState(false)
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [searchQuery, setSearchQuery] = useState('')
@@ -38,9 +40,15 @@ function AllProducts() {
         setCurrentPage(page);
     };
 
-    const handleProductDelete = () => {
-        console.log('abcd', selectedProduct._id);
-        dispatch(deleteProduct(selectedProduct._id));
+    const handleProductDelete = async () => {
+        try {
+            await dispatch(deleteProduct(selectedProduct._id));
+            setRefresh(prev => !prev)
+            closeDialog()
+        } catch (err) {
+            console.log(err.message)
+        }
+
     }
     useEffect(() => {
         dispatch(getProducts({
@@ -50,7 +58,7 @@ function AllProducts() {
             category: '',
             ratings: 0
         }));
-    }, [searchQuery, currentPage, dispatch]);
+    }, [searchQuery, currentPage, dispatch, refresh]);
 
     return (
         <div className="px-4 py-6">
@@ -209,7 +217,7 @@ function AllProducts() {
                         </div>
                         <div className="flex items-center justify-end gap-3 border-t px-6 py-4">
                             <button className="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50" onClick={closeDialog}>Close</button>
-                            <button className="rounded bg-yellow-500 px-4 py-2 font-medium text-white hover:bg-yellow-600">Edit Product</button>
+                            <Link to={`/admin/products/edit/${selectedProduct._id}`} className="rounded bg-yellow-500 px-4 py-2 font-medium text-white hover:bg-yellow-600">Edit Product</Link>
                             <button className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={handleProductDelete}>Delete Product</button>
                         </div>
                     </div>

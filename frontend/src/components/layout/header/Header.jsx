@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import logo from '/public/vite.svg'
-import { FaRegUser, FaSearch } from "react-icons/fa";
+import { FaHamburger, FaRegUser, FaSearch } from "react-icons/fa";
 import { BsCart3 } from "react-icons/bs";
 import { HiMenu, HiX } from "react-icons/hi";
 import { Link, NavLink } from 'react-router-dom';
@@ -45,11 +44,7 @@ function Header() {
                 <div className="flex justify-between items-center h-16 lg:h-20">
                     {/* Logo */}
                     <div className="flex-shrink-0 group">
-                        <img
-                            src={logo}
-                            alt="vite logo"
-                            className="h-8 w-8 lg:h-10 lg:w-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12"
-                        />
+                        <FaHamburger className="h-8 w-8 lg:h-10 lg:w-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
                     </div>
 
                     {/* Desktop Navigation */}

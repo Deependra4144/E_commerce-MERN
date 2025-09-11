@@ -22,7 +22,7 @@ function EditProfile() {
             formData.append('avatar', data.avatar[0])
         }
         // TODO: Hook up to API/dispatch when available
-        console.log('EditProfile submitted', data)
+        // console.log('EditProfile submitted', data)
     }
 
     return (

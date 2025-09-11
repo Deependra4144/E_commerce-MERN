@@ -4,6 +4,7 @@ import webFont from 'webfontloader'
 import {
   About,
   AccountDetail,
+  AllUsers,
   Cart,
   Home,
   Products,
@@ -12,7 +13,9 @@ import {
   Login,
   Layout,
   Addproduct,
-  EditProfile
+  EditProfile,
+  EditProduct,
+  Dashboard
 } from './components/Index'
 import { useDispatch, useSelector } from 'react-redux'
 import { isLogin } from './features/auth/authSlice'
@@ -28,7 +31,7 @@ function App() {
   };
 
   const ProtectedAdminRoute = ({ children }) => {
-    return (userRole && isAuthenticate) ? children : <Navigate to="/" />;
+    return ((userRole == 'admin') && (isAuthenticate)) ? children : <Navigate to="/" />;
   };
 
   const router = createBrowserRouter([{
@@ -37,7 +40,8 @@ function App() {
     children: [
       {
         path: '/',
-        element: <Home />
+        element: (userRole !== "admin") ? <Home /> : <Dashboard />
+
       },
       {
         path: '/products',
@@ -79,6 +83,19 @@ function App() {
         path: '/edit-profile',
         element: <ProtectedAdminRoute><EditProfile /></ProtectedAdminRoute>
       },
+      {
+        path: '/admin/allUsers',
+        element: <ProtectedAdminRoute><AllUsers /></ProtectedAdminRoute>
+      },
+      {
+        path: '/admin/products/edit/:id',
+        element: <ProtectedAdminRoute><EditProduct /></ProtectedAdminRoute>
+
+      },
+      {
+        path: '/admin/dashboard',
+        element: <ProtectedAdminRoute><Dashboard /></ProtectedAdminRoute>
+      }
     ]
   }])
 

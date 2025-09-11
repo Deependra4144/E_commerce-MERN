@@ -18,7 +18,7 @@ router.route('/products').get(getAllProducts);
 router.route('/product/:id').get(getProductDetails);
 
 router.route('/product/:id')
-    .put(isAuthenticatedUser, authorizeRoles('admin'), updateProduct)
+    .put(isAuthenticatedUser, authorizeRoles('admin'), upload.array('images', 4), updateProduct)
     .delete(isAuthenticatedUser, authorizeRoles('admin'), deleteProduct);
 
 router.route("/getReviews/:productId")

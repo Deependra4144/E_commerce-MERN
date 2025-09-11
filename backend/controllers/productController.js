@@ -3,7 +3,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { Product } from '../models/productModel.js'
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { ApiFeatures } from '../utils/ApiFeatures.js'
-import { uploadOnCloudinary } from '../utils/cloudinary.js';
+import { deleteFromCloudinary, uploadOnCloudinary } from '../utils/cloudinary.js';
 
 // create product --Admin
 const createProduct = asyncHandler(async (req, res) => {
@@ -45,6 +45,38 @@ const updateProduct = asyncHandler(async (req, res) => {
         throw new ApiError(500, 'product not found')
     }
 
+    if (req.files && req.files.length > 0) {
+        // delete old images from cloudinary
+        if (product.images && product.images.length > 0) {
+            await Promise.all(
+                product.images.map(async (imgURL) => {
+                    const publicId = imgURL.split("/").pop().split(".")[0];
+                    try {
+                        await deleteFromCloudinary(publicId)
+                    } catch (err) {
+                        console.error("Error deleting old Image", publicId, err.message)
+                    }
+                })
+            )
+        }
+
+        //upload new images
+        const uploadedImages = await Promise.all(
+            req.files.map(async (file) => {
+                const img = await uploadOnCloudinary(file.path)
+                return img.url
+            })
+
+        )
+        if (!uploadedImages) {
+            throw new ApiError(400, "Product image upload failed!")
+        }
+        req.body.images = uploadedImages
+
+
+    } else {
+        req.body.images = product.images;
+    }
     product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true, useFindAndModify: false })
 
     res.status(200).json(

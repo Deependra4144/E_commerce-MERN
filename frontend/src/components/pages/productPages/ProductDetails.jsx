@@ -154,7 +154,9 @@ const ProductDetails = () => {
                                 <p className="text-sm line-through text-gray-500">M.R.P.: ₹999</p>
                                 <p className="text-green-600 text-sm font-medium mt-1">Inclusive of all taxes</p>
                             </div>
-
+                            <div>
+                                <p>{productiDetail.description}</p>
+                            </div>
                             {/* Quantity Selector */}
                             <div className="flex items-center gap-4">
                                 <span className="text-gray-700">Quantity:</span>
