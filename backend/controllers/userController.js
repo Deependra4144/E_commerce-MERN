@@ -228,7 +228,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
 const getAllUser = asyncHandler(async (req, res) => {
     const users = await User.find()
-    console.log(users)
+    // console.log(users)
     res.status(200).json(
         new ApiResponse(
             200,
@@ -256,7 +256,7 @@ const sigleUserDetails = asyncHandler(async (req, res) => {
 
 //update User Role
 const updateUserRole = asyncHandler(async (req, res) => {
-
+    console.log(req.body, 'admin is Ram')
     const newUserData = {
         name: req.body.name,
         email: req.body.email,
@@ -279,6 +279,7 @@ const updateUserRole = asyncHandler(async (req, res) => {
 
 // delete user by admin 
 const deleteUser = asyncHandler(async (req, res) => {
+    // console.log(req.params.id, 'ram,ram 282')
     let user = await User.findById(req.params.id)
 
     if (!user) {
