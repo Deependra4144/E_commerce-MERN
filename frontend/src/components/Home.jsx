@@ -18,7 +18,7 @@ const categories = [
 function Home() {
     const navigate = useNavigate()
     const dispatch = useDispatch();
-    const { products, isLoading } = useSelector(state => state.product);
+    const { products, isLoading, error } = useSelector(state => state.product);
     const [searchQuery, setSearchQuery] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -34,7 +34,7 @@ function Home() {
             ratings: 0
         }));
     }, [dispatch]);
-
+    console.log(error)
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section */}
@@ -138,11 +138,14 @@ function Home() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {products.map((product, index) => (
+                        {products?.map((product, index) => (
                             <ProductCard key={product._id || index} product={product} />
                         ))}
                     </div>
                 )}
+                {error &&
+                    <div>To See Product Login First</div>
+                }
             </div>
 
             {/* Newsletter Section */}

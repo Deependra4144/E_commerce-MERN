@@ -60,6 +60,7 @@ const productSlice = createSlice({
             })
             .addCase(getProducts.rejected, (state, actions) => {
                 state.error = actions.payload
+                console.log(actions.payload)
                 state.products = null
                 state.isLoading = false
             })

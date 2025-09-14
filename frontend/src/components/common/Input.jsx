@@ -15,7 +15,7 @@ const Input = forwardRef(function Input({
                 ref={ref}
                 type={type}
                 placeholder={placeholder}
-                className={`${className} w-full outline-none border border-gray-200 p-1 rounded-sm`}
+                className={`${className} border-b border-transparent focus:border-gray-500 font-bold text-sm text-gray-600" w-full outline-none border border-gray-200 p-1 rounded-sm`}
                 {...props}
                 autoComplete="true"
             />

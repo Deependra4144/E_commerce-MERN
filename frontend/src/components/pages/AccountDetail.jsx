@@ -1,13 +1,29 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FaUser, FaEnvelope, FaPhone, FaCalendarAlt, FaEdit, FaShieldAlt, FaCartPlus } from 'react-icons/fa';
-import { logOutUser } from '../../features/auth/authSlice';
+import { logOutUser, updatePassword } from '../../features/auth/authSlice';
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Input from '../common/Input'
+import { useForm } from 'react-hook-form'
+import { useState } from 'react';
+
 
 const AccountDetail = () => {
+    const [showForm, setShowForm] = useState(false)
+    const { register, handleSubmit, watch, reset } = useForm()
+    let {
+        isAuthenticate,
+        userRole,
+        user,
+        isLoading,
+        error
+    } = useSelector(state => state.auth)
+
     let navigate = useNavigate()
-    let { isAuthenticate, userRole, user, isLoading, error } = useSelector(state => state.auth)
+    let newPassword = watch('newPassword')
     let dispatch = useDispatch()
+
+
     const handleLogOut = () => {
         dispatch(logOutUser())
     }
@@ -17,11 +33,24 @@ const AccountDetail = () => {
         }
     }, [isAuthenticate, navigate, user])
 
+    const handleShowForm = () => {
+        setShowForm((prev) => !prev)
+        setTimeout(() => {
+            reset()
+        }, 3000);
+    }
+
+
+    // console.log(newPassword)
+    const handlePasswordUpdate = (data) => {
+        // console.log(data)
+        dispatch(updatePassword(data))
+    }
     if (isLoading) {
-        <p className="text-sm text-gray-600 text-center">Logging out...</p>
+        return <p className="text-sm text-gray-600 text-center">Updating password...</p>
     }
     if (error) {
-        <p className="text-sm text-red-600 text-center">{error}</p>
+        return <p className="text-sm text-red-600 text-center">{error}</p>
     }
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
@@ -47,27 +76,63 @@ const AccountDetail = () => {
                     {/* Profile Card */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                            <div className="relative inline-block">
-                                <img
-                                    src={user.avatar}
-                                    alt={user.name}
-                                    className="w-40 h-40 rounded-full object-cover border-4 border-blue-500 shadow-lg"
-                                />
-                                <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
-                                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                            <div className="relative flex flex-col">
+                                <div className='group relative flex justify-center items-center'>
+                                    <img
+                                        src={user.avatar}
+                                        alt={user.name}
+                                        className="group-hover:opacity-60 w-40 h-40 rounded-full object-center border-4 border-blue-100 shadow-lg"
+                                    />
+                                    <label htmlFor='avatarUpload' className='w-full h-full group-hover:grid place-content-center hidden group-hover:cursor-pointer absolute font-bold text-gray-700'>Update Avatar</label>
+                                    <div className="absolute -bottom-2 -right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white flex items-center justify-center">
+                                        <div className="w-2 h-2 bg-white rounded-full"></div>
+                                    </div>
                                 </div>
+                                {showForm && <form className='px-16 flex flex-col gap-y-2 mt-6' onSubmit={handleSubmit(data => handlePasswordUpdate(data))}>
+                                    <Input
+                                        {...register('oldPassword', { required: { value: true, message: 'oldPassword is required' } })}
+                                        type='password'
+                                        placeholder='enter old Password'
+                                        active='true'
+                                        className="!border-0 !border-b-2 !border-gray-300 focus:!border-blue-500 focus:!ring-0"
+                                    />
+                                    <Input
+                                        {...register('newPassword', {
+                                            required: { value: true, message: 'newPassword is required' }
+                                        })}
+                                        type="password"
+                                        placeholder='enter new Password'
+                                        className="!border-0 !border-b-2 !border-gray-300 focus:!border-blue-500 focus:!ring-0"
+                                    />
+                                    <Input
+                                        {...register('confirmPassword', {
+                                            required: { value: true, message: 'confirmPassword is required' },
+                                            validate: value => value === watch("newPassword") || "Password dose not match"
+                                        })}
+                                        type="password"
+                                        placeholder='Confirm Password'
+                                        className="!border-0 !border-b-2 !border-gray-300 focus:!border-blue-500 focus:!ring-0"
+                                    />
+
+                                    {newPassword &&
+                                        <button type='submit' className="bg-green-200 text-blue-700 px-4 py-2 rounded-lg text-sm font-medium">Update</button>
+                                    }
+                                </form>}
                             </div>
 
-                            <h2 className="text-2xl font-bold text-gray-900 mt-6">{user.name}</h2>
+                            <h2 className="text-2xl font-bold text-gray-900 mt-4">{user.name}</h2>
                             <div className="flex items-center justify-center gap-2 mt-2">
                                 <FaShieldAlt className="text-blue-600" />
                                 <span className="text-blue-600 font-medium capitalize">{user.role}</span>
                             </div>
 
                             <div className="mt-6 flex flex-col gap-2">
-                                <div className="bg-green-50 text-green-700 px-4 py-2 rounded-lg text-sm font-medium">
-                                    Account Verified
-                                </div>
+                                <button onClick={handleShowForm}
+                                    className={`bg-green-50 ${!showForm ? 'text-green-700' : 'text-red-700'} px-4 py-2 rounded-lg text-sm font-medium`}
+                                >
+                                    {!showForm ? 'Update Password' : 'Cancel'}
+                                </button>
+
                                 <div onClick={handleLogOut} className="bg-green-50 text-red-700 cursor-pointer px-4 py-2 rounded-lg text-sm font-medium">
                                     Log Out
                                 </div>
@@ -179,7 +244,7 @@ const AccountDetail = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

@@ -24,29 +24,16 @@ function AllUsers() {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
     const [selectedUser, setSelectedUser] = useState(null)
     const [refresh, setRefresh] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState(null)
 
     useEffect(() => {
-        let isMounted = true
-        try {
-            setIsLoading(true)
-            setError(null)
-            dispatch(getAllUsers()).unwrap()
-
-        } catch (err) {
-            if (!isMounted) return
-            setError(err.response?.data?.message || err.message || 'Failed to load users')
-        } finally {
-            if (isMounted) setIsLoading(false)
-        }
-        return () => { isMounted = false }
+        dispatch(getAllUsers())
     }, [refresh, dispatch])
 
     useEffect(() => {
         reset({
             name: selectedUser?.name || '',
             email: selectedUser?.email || '',
+            phone: selectedUser?.phone || '',
             role: selectedUser?.role || ''
         })
     }, [reset, selectedUser])
@@ -83,10 +70,12 @@ function AllUsers() {
         if (!selectedUser) return
         try {
             await dispatch(deleteUser(selectedUser._id)).unwrap()
-            setRefresh(prev => !prev)
-            closeDialog()
-        } catch (err) {
-            alert(err.response?.data?.message || err.message || 'Delete failed')
+            if (deleteUserSuccess) {
+                setRefresh(prev => !prev)
+                closeDialog()
+            }
+        } catch {
+            // Error handling is now managed by Redux state
         }
     }
 
@@ -148,17 +137,17 @@ function AllUsers() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                        {isLoading && (
+                        {usersLoading && (
                             <tr>
                                 <td colSpan="5" className="px-4 py-6 text-center text-sm text-gray-500">Loading...</td>
                             </tr>
                         )}
-                        {!isLoading && error && (
+                        {!usersLoading && usersError && (
                             <tr>
-                                <td colSpan="5" className="px-4 py-6 text-center text-sm text-red-600">{error}</td>
+                                <td colSpan="5" className="px-4 py-6 text-center text-sm text-red-600">{usersError}</td>
                             </tr>
                         )}
-                        {!isLoading && !error && currentUsers.map(user => (
+                        {!usersLoading && !usersError && currentUsers.map(user => (
                             <tr key={user._id} className="hover:bg-gray-50">
                                 <td className="px-4 py-3">
                                     <img src={user.avatar?.url || user.avatar || '/placeholder-avatar.png'} alt={user.name} className="h-12 w-12 rounded-full object-cover ring-1 ring-gray-200" />
@@ -223,35 +212,57 @@ function AllUsers() {
                                         <Input
                                             {...register('name')}
                                             className="text-xl font-semibold outline-none border-none"
+                                            error={errors.name?.message}
+                                        />
+                                        <Input
+                                            {...register('phone')}
+                                            className="border-none outline-none mt-1 font-bold text-sm text-gray-600"
+                                            readOnly
+                                            error={errors.phone?.message}
                                         />
                                         <button onClick={closeDialog} className="rounded absolute top-2 font-bold right-4 p-1 text-gray-700 hover:bg-gray-100">✕</button>
                                     </div>
                                     <Input
                                         {...register('email')}
                                         className="mt-1 text-sm text-gray-600 outline-none border-none"
+                                        error={errors.email?.message}
                                     />
-                                    <Input
-                                        {...register('phone')}
-                                        className="mt-1 text-sm text-gray-600 outline-none border-none"
-                                    />
-                                    <div className="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-700">
+
+                                    <div className="mt-4 align-items-center grid grid-cols-2 gap-4 text-sm text-gray-700">
                                         <div className='flex gap-x-1 items-center'>
-                                            <span className="font-medium">Role: </span>
+                                            <span className="font-medium">Role:</span>
                                             <Input
                                                 {...register('role')}
                                                 className="p-0 outline-none border-none"
+                                                error={errors.role?.message}
                                             />
 
                                         </div>
-                                        <div>
+                                        <div className='flex align-items-center gap-x-1 items-center'>
                                             <span className="font-medium">User ID: </span>{selectedUser._id}
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex items-center justify-end gap-3 border-t mt-6 px-6 py-2">
                                     {isDirty && <button type='submit' className="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50">Update User</button>}
-                                    <button className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700" onClick={handleDeleteUser}>Delete User</button>
+                                    <button
+                                        className="rounded bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        onClick={handleDeleteUser}
+                                        disabled={deleteUserLoading}
+                                    >
+                                        {deleteUserLoading ? 'Deleting...' : 'Delete User'}
+                                    </button>
                                 </div>
+                                {deleteUserError && (
+                                    <div className="mt-2 text-sm text-red-600 text-center">
+                                        {deleteUserError}
+                                    </div>
+                                )}
+                                {deleteUserSuccess && (
+                                    <div className="mt-2 text-sm text-green-600 text-center">
+                                        User deleted successfully!
+                                    </div>
+                                )}
                             </form>
                         </div>
                     </div>

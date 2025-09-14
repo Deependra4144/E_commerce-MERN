@@ -13,6 +13,7 @@ import EditProfile from './pages/user/admin/EditProfile.jsx'
 import EditProduct from './pages/adminPages/EditPoduct.jsx'
 import Dashboard from './pages/adminPages/Dashboard.jsx'
 import AllUsers from './pages/adminPages/AllUsers.jsx'
+import Sidebar from './common/Sidebar.jsx'
 export {
     About,
     AccountDetail,
@@ -28,6 +29,7 @@ export {
     Reviews,
     EditProfile,
     EditProduct,
-    Dashboard
+    Dashboard,
+    Sidebar
 
 }

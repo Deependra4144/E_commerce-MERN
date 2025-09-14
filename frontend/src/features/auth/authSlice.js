@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { axiosInstance } from "../../services/axiosInstance"
+import toast from 'react-hot-toast';
 
 export const registerUser = createAsyncThunk('auth/register', async (userData, thunkApi) => {
     // console.log('Sending userData:', userData)
@@ -46,15 +47,6 @@ export const isLogin = createAsyncThunk('auth/me', async (_, thunkapi) => {
     }
 })
 
-export const logOutUser = createAsyncThunk('auth/logOut', async (_, thunkApi) => {
-    try {
-        let response = await axiosInstance.get('/users/logout')
-        return response.data
-    } catch (error) {
-        return thunkApi.rejectWithValue(error.response.data.message)
-    }
-})
-
 export const updateProfile = createAsyncThunk('auth/updateProfile', async (userData, thunkApi) => {
     try {
         let response = await axiosInstance.put('/users/me/updateProfile', userData)
@@ -64,12 +56,44 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (userD
     }
 })
 
+export const updatePassword = createAsyncThunk('auth/updateAvatar', async (data, thunkApi) => {
+    let isAuthenticate = thunkApi.getState().auth.isAuthenticate
+    // console.log(isAuthenticate)
+    if (!isAuthenticate) {
+        return thunkApi.rejectWithValue('is not Authenticate')
+    }
+    try {
+        let response = await axiosInstance.put('/password/updatePassword', data)
+        // console.log(response.data)
+        return response.data
+    } catch (err) {
+        console.log(err.response.data)
+        return thunkApi.rejectWithValue(err.response?.data)
+    }
+})
+
+export const logOutUser = createAsyncThunk('auth/logOut', async (_, thunkApi) => {
+    try {
+        let response = await axiosInstance.get('/users/logout')
+        return response.data
+    } catch (error) {
+        return thunkApi.rejectWithValue(error.response.data.message)
+    }
+})
+
+
+
 let initialState = {
     isAuthenticate: false,
     user: null,
     isLoading: false,
     error: null,
-    userRole: null
+    userRole: null,
+
+    //updateAvatar
+    updatePasswordLoading: false,
+    updatePasswordSuccess: null,
+    updatePasswordError: null
 }
 const authSlice = createSlice({
     name: "auth",
@@ -149,6 +173,29 @@ const authSlice = createSlice({
             .addCase(updateProfile.rejected, (state, actions) => {
                 state.error = actions.payload
                 state.isLoading = false
+            })
+
+            //updatePassword
+            .addCase(updatePassword.pending, state => {
+                state.updatePasswordLoading = true
+                state.updatePasswordSuccess = null
+                toast.loading('updating password...', { id: 'pending' })
+
+            })
+            .addCase(updatePassword.fulfilled, (state) => {
+                state.updatePasswordLoading = false
+                state.updatePasswordSuccess = true
+                state.updatePasswordError = null
+                toast.dismiss('pending')
+                toast.success('password update successfully', { id: 'success' })
+            })
+            .addCase(updatePassword.rejected, (state, actions) => {
+                state.updatePasswordLoading = false
+                state.updatePasswordSuccess = null
+                state.updatePasswordError = actions.payload || 'Something went wrong authSlice 188'
+                toast.dismiss('pending')
+                console.log(actions.payload)
+                toast.error(actions.payload.data.message || 'xyz')
             })
 
             //log out user

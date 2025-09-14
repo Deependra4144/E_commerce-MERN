@@ -1,4 +1,5 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import Sidebar from '../../common/Sidebar'
 
 function Dashboard() {
     return (
@@ -16,42 +17,7 @@ function Dashboard() {
 
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
                 {/* Sidebar */}
-                <aside className="bg-white border border-gray-200 rounded-lg h-max">
-                    <nav className="p-3">
-                        <ul className="space-y-1">
-                            <li>
-                                <NavLink to="/admin/dashboard" end className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
-                                    <span>Overview</span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/admin/allProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
-                                    <span>All Products</span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/admin/addProduct" className={({ isActive }) => `flex items-center gap-2 rounded-md px-3 py-2 text-sm ${isActive ? 'bg-indigo-50 text-indigo-700 font-medium' : 'hover:bg-gray-50'}`}>
-                                    <span>Add Product</span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/" className="w-full text-left flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-50">
-                                    <span>Orders</span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/admin/allUsers" className="w-full text-left flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-50">
-                                    <span>All Users</span>
-                                </NavLink>
-                            </li>
-                            <li>
-                                <button className="w-full text-left flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-gray-50">
-                                    <span>Settings</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </aside>
+                <Sidebar />
 
                 {/* Main Content */}
                 <main className="space-y-6">
