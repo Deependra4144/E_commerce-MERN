@@ -38,7 +38,7 @@ function Products() {
         setCurrentPage(page);
     };
 
-    console.log(location.state, products)
+    // console.log(location.state, products)
 
     useEffect(() => {
         if (location.state) {

@@ -1,5 +1,6 @@
 import About from './About.jsx'
 import Cart from './Cart.jsx'
+import Contact from './Contact.jsx'
 import Home from './Home.jsx'
 import Products from './pages/productPages/Products.jsx'
 import ProductDetails from './pages/productPages/ProductDetails.jsx'
@@ -14,22 +15,27 @@ import EditProduct from './pages/adminPages/EditPoduct.jsx'
 import Dashboard from './pages/adminPages/Dashboard.jsx'
 import AllUsers from './pages/adminPages/AllUsers.jsx'
 import Sidebar from './common/Sidebar.jsx'
+import ForgetPassword from './pages/user/ForgetPassword.jsx'
+import ResetPassword from './pages/user/ResetPassword.jsx'
 export {
     About,
     AccountDetail,
     Addproduct,
     AllUsers,
     Cart,
-    Home,
-    Products,
-    ProductDetails,
-    Register,
-    Login,
-    Layout,
-    Reviews,
-    EditProfile,
-    EditProduct,
+    Contact,
     Dashboard,
+    EditProduct,
+    EditProfile,
+    ForgetPassword,
+    Home,
+    Layout,
+    Login,
+    ProductDetails,
+    Products,
+    Register,
+    ResetPassword,
+    Reviews,
     Sidebar
-
 }
+

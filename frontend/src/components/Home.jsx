@@ -34,7 +34,7 @@ function Home() {
             ratings: 0
         }));
     }, [dispatch]);
-    console.log(error)
+    // console.log(error)
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section */}

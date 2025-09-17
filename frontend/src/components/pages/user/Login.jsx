@@ -15,12 +15,14 @@ const Login = () => {
     let dispatch = useDispatch()
 
     const submitToLogin = (data) => {
-        // console.log(data)
         dispatch(loginUser(data))
-
     }
 
+    const handleForgetPassword = () => {
+        navigate('/forgetPassword')
+    }
     useEffect(() => {
+        console.log(isAuthenticate, user)
         if (isAuthenticate && user) {
             navigate('/userAccount');
         }
@@ -42,9 +44,9 @@ const Login = () => {
                         label="Email"
                         type="email"
                         placeholder="Email"
-                        autoComplete="email"
+                        autoComplete="enter email"
                         error={errors.email?.message}
-                        className={`peer px-4 py-3 focus:ring-2 focus:ring-blue-400 bg-transparent placeholder-transparent ${errors.email ? 'border-red-400' : 'border-gray-300'}`}
+                        className={`peer px-4 py-3 bg-gray-100 focus:ring-2 focus:ring-blue-400 ${errors.email ? 'border-red-400' : 'border-gray-300'}`}
                         {...register('email', {
                             required: 'Email is required',
                             pattern: {
@@ -58,10 +60,10 @@ const Login = () => {
                         <Input
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
-                            placeholder="Password"
+                            placeholder="enter password"
                             autoComplete="current-password"
                             error={errors.password?.message}
-                            className={`peer px-4 py-3 focus:ring-2 focus:ring-blue-400 bg-transparent placeholder-transparent ${errors.password ? 'border-red-400' : 'border-gray-300'}`}
+                            className={`peer px-4 py-3 bg-gray-100 focus:ring-2 focus:ring-blue-400 ${errors.password ? 'border-red-400' : 'border-gray-300'}`}
                             {...register('password', {
                                 required: 'Password is required',
                                 minLength: {
@@ -70,6 +72,9 @@ const Login = () => {
                                 },
                             })}
                         />
+                        <div className='text-blue-500 text-sm text-end'>
+                            <button className='hover:cursor-pointer hover:underline' onClick={handleForgetPassword}>Forget Password</button>
+                        </div>
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}

@@ -41,7 +41,7 @@ const Register = () => {
                     <img style={{ width: '100px', height: '100px' }} className='shadow-md mx-auto rounded-full' src={avatarView} alt="" />
                     {errors.avatar?.message && <p className='text-red-500 text-sm text-center'>{errors.avatar?.message}</p>}
                 </div>
-                <form onSubmit={handleSubmit(data => handleFormSubmit(data))} className='flex flex-col gap-5'>
+                <form onSubmit={handleSubmit(data => handleFormSubmit(data))} className='flex flex-col gap-4'>
                     <div className="w-full text-center mt-5">
                         <label htmlFor="avatar-upload" className=' text-center cursor-pointer text-blue-500 mt-4 hover:text-blue-800 hover:scale-105 transition-all duration-300'>
                             Upload Avatar
@@ -66,6 +66,7 @@ const Register = () => {
                         label='Name'
                         type='text'
                         placeholder='Enter your name'
+                        className='bg-gray-100'
                     />
 
                     <Input
@@ -77,6 +78,7 @@ const Register = () => {
                         label='Email'
                         type='email'
                         placeholder='Enter your username'
+                        className='bg-gray-100'
                     />
                     <Input
                         {...register(
@@ -90,6 +92,7 @@ const Register = () => {
                         label='Phone'
                         type='number'
                         placeholder='phone number'
+                        className='bg-gray-100'
                     />
                     <Input
                         {...register(
@@ -103,6 +106,7 @@ const Register = () => {
                         label='Password'
                         type='password'
                         placeholder='password'
+                        className='bg-gray-100'
                     />
 
                     <label className='relative top-7 font-semibold left-2' htmlFor="">Role</label>

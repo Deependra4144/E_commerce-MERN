@@ -4,18 +4,21 @@ import webFont from 'webfontloader'
 import {
   About,
   AccountDetail,
+  Addproduct,
   AllUsers,
   Cart,
-  Home,
-  Products,
-  ProductDetails,
-  Register,
-  Login,
-  Layout,
-  Addproduct,
-  EditProfile,
+  Contact,
+  Dashboard,
   EditProduct,
-  Dashboard
+  EditProfile,
+  ForgetPassword,
+  Home,
+  Layout,
+  Login,
+  ProductDetails,
+  Products,
+  Register,
+  ResetPassword
 } from './components/Index'
 import { useDispatch, useSelector } from 'react-redux'
 import { isLogin } from './features/auth/authSlice'
@@ -52,6 +55,10 @@ function App() {
         element: <About />
       },
       {
+        path: '/contact',
+        element: <Contact />
+      },
+      {
         path: '/product/:id',
         element: <ProductDetails />
       },
@@ -62,6 +69,14 @@ function App() {
       {
         path: '/register',
         element: <Register />
+      },
+      {
+        path: '/forgetPassword',
+        element: <ForgetPassword />
+      },
+      {
+        path: '/password/reset/:token',
+        element: <ResetPassword />
       },
       {
         path: '/cart',

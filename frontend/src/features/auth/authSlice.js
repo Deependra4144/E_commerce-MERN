@@ -56,6 +56,15 @@ export const updateProfile = createAsyncThunk('auth/updateProfile', async (userD
     }
 })
 
+export const forgetPassword = createAsyncThunk('auth/forgetPassword', async (email, thunkApi) => {
+    try {
+        let response = await axiosInstance.post('/password/forgot', email)
+        return response.data
+    } catch (err) {
+        thunkApi.rejectWithValue(err.response.data.message || 'something went wrong while forget password')
+    }
+})
+
 export const updatePassword = createAsyncThunk('auth/updateAvatar', async (data, thunkApi) => {
     let isAuthenticate = thunkApi.getState().auth.isAuthenticate
     // console.log(isAuthenticate)
@@ -72,6 +81,16 @@ export const updatePassword = createAsyncThunk('auth/updateAvatar', async (data,
     }
 })
 
+export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ token, data }, thunkApi) => {
+    console.log(token, data, 'authSlice')
+    try {
+        let response = await axiosInstance.put(`/password/reset/${token}`, data)
+        return response.data
+    } catch (err) {
+        console.log(err)
+        thunkApi.rejectWithValue()
+    }
+})
 export const logOutUser = createAsyncThunk('auth/logOut', async (_, thunkApi) => {
     try {
         let response = await axiosInstance.get('/users/logout')
@@ -93,7 +112,18 @@ let initialState = {
     //updateAvatar
     updatePasswordLoading: false,
     updatePasswordSuccess: null,
-    updatePasswordError: null
+    updatePasswordError: null,
+
+    //forget password
+    forgetPasswordLoading: false,
+    forgetPasswordSuccess: null,
+    forgetPasswordError: null,
+
+    //reset Password
+    resetPasswordLoading: false,
+    resetPasswordSuccess: null,
+    resetPasswordError: null,
+
 }
 const authSlice = createSlice({
     name: "auth",
@@ -128,7 +158,7 @@ const authSlice = createSlice({
             })
             .addCase(loginUser.fulfilled, (state, actions) => {
                 state.isLoading = false
-                state.user = actions.payload.data
+                state.user = actions.payload
                 state.isAuthenticate = true
                 state.userRole = state.user.role
             })
@@ -150,6 +180,7 @@ const authSlice = createSlice({
                 state.error = null
                 state.isAuthenticate = true
                 state.user = actions.payload.data
+                console.log(actions.payload)
                 state.userRole = state.user.role
             })
             .addCase(isLogin.rejected, (state, actions) => {
@@ -213,6 +244,46 @@ const authSlice = createSlice({
                 state.isLoading = false
                 state.error = actions.payload
             })
+
+            //forget Password
+            .addCase(forgetPassword.pending, state => {
+                state.forgetPasswordLoading = true,
+                    state.forgetPasswordSuccess = null,
+                    state.forgetPasswordError = null
+            })
+            .addCase(forgetPassword.fulfilled, (state, actions) => {
+                state.forgetPasswordLoading = false,
+                    state.forgetPasswordSuccess = actions.payload,
+                    state.forgetPasswordError = null
+                console.log(state.forgetPasswordSuccess)
+            })
+            .addCase(forgetPassword.rejected, (state, actions) => {
+                state.forgetPasswordLoading = false,
+                    state.forgetPasswordSuccess = null,
+                    state.forgetPasswordError = actions.payload
+                // console.log(state.forgetPasswordError)
+            })
+
+            //resetPassword
+            .addCase(resetPassword.pending, state => {
+                state.resetPasswordLoading = true,
+                    state.resetPasswordSuccess = null,
+                    state.resetPasswordError = null
+            })
+            .addCase(resetPassword.fulfilled, (state, actions) => {
+                state.resetPasswordLoading = false,
+                    state.resetPasswordSuccess = actions.payload,
+                    state.resetPasswordError = null
+                console.log(state.resetPasswordSuccess)
+            })
+            .addCase(resetPassword.rejected, (state, actions) => {
+                state.resetPasswordLoading = false,
+                    state.resetPasswordSuccess = null,
+                    state.resetPasswordError = actions.payload
+                console.log(state.resetPasswordError)
+            })
+
+
     }
 })
 

@@ -7,6 +7,8 @@ import { sendEmail } from "../utils/sendEmail.js"
 import crypto from "crypto"
 import { deleteFromCloudinary, uploadOnCloudinary } from '../utils/cloudinary.js'
 
+
+
 //Register User
 const registerUser = asyncHandler(async (req, res) => {
     const { name, email, phone, password, role } = req.body;
@@ -79,19 +81,19 @@ const logOutUser = asyncHandler(async (_, res) => {
 
 // forget password
 const forgetPassword = asyncHandler(async (req, res, next) => {
+    // let otp = Math.floor(2000 + Math.random() * 9000)
+    console.log(req.body)
     const user = await User.findOne({ email: req.body.email });
-
     if (!user) {
         throw new ApiError(404, 'user not found')
     }
-
     // get resetPassword token
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
     console.log(user.resetPasswordToken)
 
-    const resetPasswordURL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+    const resetPasswordURL = `${req.protocol}://${req.get("host")}/password/reset/${resetToken}`
 
     const message = `your password resetToken is :- \n\n ${resetPasswordURL} \n\n if you have not requested this email then please ignore it`
 
@@ -130,11 +132,11 @@ const resetPassword = asyncHandler(async (req, res) => {
         throw new ApiError(404, "resetPassword Token is invalid or has been expired")
     }
 
-    if (req.body.password !== req.body.confirmPassword) {
+    if (req.body.newPassword !== req.body.confirmPassword) {
         throw new ApiError(400, 'confirm password dos not match')
     }
 
-    user.password = req.body.password
+    user.password = req.body.newPassword
     user.resetPasswordToken = undefined
     user.resetPasswordExpire = undefined
 

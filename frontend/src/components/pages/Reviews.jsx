@@ -4,6 +4,7 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function Reviews({ reviews }) {
+    // console.log(reviews)
     return (
         <>
             <style>
@@ -24,7 +25,7 @@ function Reviews({ reviews }) {
                 dynamicHeight={false}
                 className="rounded-lg overflow-hidden"
             >
-                {reviews ? (reviews.map((review, index) => (
+                {reviews.length > 0 ? (reviews.map((review, index) => (
                     <div key={index} className="flex justify-center py-6 px-4 bg-white">
                         <div className="max-w-md w-full border rounded-lg shadow-md p-5">
                             {/* User Info */}
